@@ -1,5 +1,6 @@
 import requests
 from telegram.ext import ApplicationBuilder, ContextTypes
+from datetime import datetime 
 # УБРАНО: from keep_alive import keep_alive
 
 # --- НАСТРОЙКИ ---
@@ -9,6 +10,12 @@ ROBLOX_USER_IDS = [7821605292, 8500408550]
 CHECK_INTERVAL = 60
 
 previous_statuses = {}
+
+
+async def check_and_notify(context: ContextTypes.DEFAULT_TYPE):
+    print(f"🔄 [{datetime.now().strftime('%H:%M:%S')}] Проверка статусов...")
+    
+    current_statuses = get_roblox_status(ROBLOX_USER_IDS)
 
 def get_roblox_status(user_ids):
     url = "https://presence.roblox.com/v1/presence/users"
