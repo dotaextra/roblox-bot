@@ -1,10 +1,8 @@
-import os
 import requests
 from telegram.ext import ApplicationBuilder, ContextTypes
-from keep_alive import keep_alive
+# УБРАНО: from keep_alive import keep_alive
 
 # --- НАСТРОЙКИ ---
-# Лучше брать токен из переменных окружения Render, но можно и здесь
 BOT_TOKEN = "9176970614:AAHFOqZIh_GOMojON-BbH_bQC5bNVEOStKk"
 CHAT_ID = 362678203 
 ROBLOX_USER_IDS = [7821605292, 8500408550]
@@ -42,8 +40,7 @@ async def check_and_notify(context: ContextTypes.DEFAULT_TYPE):
             previous_statuses[uid] = status
 
 if __name__ == '__main__':
-    # Запускаем веб-сервер для бодрствования
-    keep_alive()
+    # УБРАНО: keep_alive()
     
     application = ApplicationBuilder().token(BOT_TOKEN).build()
     job_queue = application.job_queue
