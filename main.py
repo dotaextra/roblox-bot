@@ -13,9 +13,31 @@ previous_statuses = {}
 
 
 async def check_and_notify(context: ContextTypes.DEFAULT_TYPE):
-    print(f"🔄 [{datetime.now().strftime('%H:%M:%S')}] Проверка статусов...")
+    now = datetime.now().strftime('%H:%M:%S')
+    print(f"🔄 [{now}] Начинаю проверку статусов...")
     
     current_statuses = get_roblox_status(ROBLOX_USER_IDS)
+    
+    if not current_statuses:
+        print(f"⚠️ [{now}] Не удалось получить данные от Roblox API!")
+        return
+
+    print(f"✅ [{now}] Получены статусы: {current_statuses}")
+
+    for uid, status in current_statuses.items():
+        prev_status = previous_statuses.get(uid)
+        
+        if prev_status != status:
+            message = f"🎮 Roblox Alert:\nUser ID: {uid}\nСтатус: {status}"
+            try:
+                await context.bot.send_message(chat_id=CHAT_ID, text=message)
+                print(f"📩 [{now}] Отправлено уведомление: {uid} -> {status}")
+            except Exception as e:
+                print(f"❌ [{now}] Ошибка отправки в Telegram: {e}")
+            
+            previous_statuses[uid] = status
+        else:
+            print(f"💤 [{now}] Статус {uid} не изменился ({status}), пропускаю.")
 
 def get_roblox_status(user_ids):
     url = "https://presence.roblox.com/v1/presence/users"
